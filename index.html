@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Черногория — общая карта маршрута</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+html, body {
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:#172033;
+  background:#f7f2e8;
+}
+#map {
+  position:fixed !important;
+  left:0 !important;
+  top:0 !important;
+  bottom:0 !important;
+  right:500px !important;
+  min-width:360px;
+  background:#dbeafe;
+  z-index:1;
+}
+#sidebar {
+  position:fixed !important;
+  top:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  width:500px !important;
+  max-width:500px !important;
+  overflow-y:auto;
+  padding:22px;
+  background:linear-gradient(180deg,#fffaf0,#f6f0e2);
+  border-left:1px solid rgba(15,46,85,.14);
+  box-shadow:-18px 0 40px rgba(15,46,85,.16);
+  z-index:2;
+  box-sizing:border-box;
+}
+h1 {
+  margin:0 0 8px;
+  color:#0f2e55;
+  font-size:28px;
+  line-height:1.1;
+  letter-spacing:-.03em;
+}
+.subtitle {
+  margin:0 0 14px;
+  color:#64748b;
+  font-size:14px;
+  line-height:1.45;
+}
+.note {
+  margin:0 0 16px;
+  padding:11px 12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.86);
+  border:1px solid #dfd4bf;
+  color:#475569;
+  font-size:13px;
+  line-height:1.45;
+}
+.controls {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:18px;
+}
+button {
+  border:1px solid rgba(15,46,85,.14);
+  background:rgba(255,255,255,.95);
+  color:#0f2e55;
+  padding:10px 12px;
+  border-radius:13px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 3px 12px rgba(15,46,85,.06);
+  text-align:left;
+}
+button:hover { background:#fff; }
+.section-title {
+  margin:18px 0 10px;
+  color:#0f2e55;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  font-weight:900;
+}
+.day {
+  border:1px solid rgba(15,46,85,.10);
+  background:rgba(255,255,255,.82);
+  border-radius:18px;
+  padding:12px;
+  margin:10px 0;
+  cursor:pointer;
+}
+.day.active {
+  background:#fff;
+  box-shadow:0 12px 26px rgba(15,46,85,.13);
+  border-color:rgba(15,46,85,.36);
+}
+.day-head {
+  display:grid;
+  grid-template-columns:72px 1fr;
+  gap:10px;
+  align-items:start;
+}
+.date {
+  color:#fff;
+  border-radius:999px;
+  padding:7px 8px;
+  text-align:center;
+  font-weight:900;
+  font-size:12px;
+  line-height:1.05;
+}
+.day-title {
+  margin:0;
+  color:#0f2e55;
+  font-size:15px;
+  line-height:1.28;
+  font-weight:900;
+}
+.base {
+  margin-top:3px;
+  color:#64748b;
+  font-size:12.5px;
+  font-weight:800;
+}
+.chip {
+  display:inline-block;
+  margin-top:8px;
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:12px;
+  color:#334155;
+}
+.legend {
+  margin-top:18px;
+  padding:14px;
+  border-radius:18px;
+  border:1px solid rgba(15,46,85,.10);
+  background:rgba(255,255,255,.86);
+  font-size:13px;
+  line-height:1.5;
+}
+.legend-row {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:8px;
+}
+.line-demo { width:34px;border-top:6px solid #2563eb;border-radius:4px; }
+.dot-demo { width:14px;height:14px;border-radius:50%;background:#0f2e55; }
+.leaflet-control-layers {
+  box-shadow:0 8px 24px rgba(15,23,42,.16);
+  background:#fff;
+  border-radius:14px;
+  padding:8px 10px;
+}
+.marker {
+  width:24px;height:24px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:12px;font-weight:900;
+  border:3px solid #fff;
+  box-shadow:0 8px 18px rgba(15,46,85,.22);
+  background:#0f2e55;
+}
+.hotel {
+  width:34px;height:34px;border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg);
+  background:#0f2e55;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;border:3px solid #fff;
+  box-shadow:0 8px 18px rgba(15,46,85,.22);
+}
+.hotel span { transform:rotate(45deg); }
+.airport {
+  width:28px;height:28px;border-radius:50%;
+  background:#fff;color:#0f2e55;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;border:3px solid #fff;
+  box-shadow:0 8px 18px rgba(15,46,85,.22);
+}
+.overview {
+  width:16px;height:16px;border-radius:50%;
+  background:#0f2e55;border:3px solid #fff;
+  box-shadow:0 5px 14px rgba(15,46,85,.24);
+}
+.popup h3 { margin:0 0 5px;color:#0f2e55;font-size:15px; }
+.popup p { margin:0;font-size:13px;line-height:1.4; }
+@media (max-width:900px) {
+  body { overflow:auto; }
+  #map {
+    position:relative !important;
+    left:auto !important; right:auto !important; top:auto !important; bottom:auto !important;
+    width:100% !important; height:55vh !important; min-width:0;
+  }
+  #sidebar {
+    position:relative !important;
+    width:100% !important; max-width:none !important;
+    min-height:45vh;
+    border-left:none;
+    border-top:1px solid rgba(15,46,85,.14);
+  }
+}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<aside id="sidebar">
+  <h1>Черногория: общая карта маршрута</h1>
+  <p class="subtitle">На общей карте оставлены только автомобильные переезды. Линии маршрута скрыты по умолчанию и появляются при выборе дня.</p>
+  <p class="note"><strong>Как пользоваться:</strong> нажмите на день — появятся автомобильные линии, точки и стрелки выбранного дня. Кнопка «Показать весь маршрут» включает все автомобильные линии. Кнопка «Открыть достопримечательности в Google Maps» переносит в Google Maps именно именованные места и достопримечательности выбранного дня.</p>
+  <div class="controls">
+    <button id="fitAll">Показать весь маршрут</button>
+    <button id="hideAll">Скрыть линии</button>
+    <button id="focusBay">Бока-Которская</button>
+    <button id="openGoogleMaps">Открыть достопримечательности в Google Maps</button>
+    
+  </div>
+  <div class="section-title">План по дням</div>
+  <div id="days"></div>
+  <div class="legend">
+    <strong>Условные обозначения</strong>
+    <div class="legend-row"><span class="line-demo"></span> автомобильный маршрут</div>
+    <div class="legend-row"><span class="dot-demo"></span> точки выбранного дня</div>
+  </div>
+</aside>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const PLACES = {"airport": ["Аэропорт Тиват (TIV)", 42.4047, 18.7233, "airport", "Прилет 30 мая 09:10; вылет 7 июня 10:00."], "tivat_hotel": ["Casa Manor Boutique Hotel", 42.4385, 18.6965, "hotel", "Тиват · 30 мая — 1 июня"], "porto": ["Porto Montenegro", 42.4356, 18.6931, "sight", "Марина и набережная."], "plavi_parking": ["Plavi Horizonti", 42.3987, 18.6766, "beach", "Пляж / парковка Plavi Horizonti."], "miriste": ["Mirište / лодка к Голубой пещере", 42.3929, 18.5735, "beach", "Пляж и лодочная точка."], "blue_cave": ["Голубая пещера", 42.4043, 18.5674, "boat", "Лодочный участок."], "lustica_bay": ["Luštica Bay", 42.4037, 18.6622, "sight", "Марина и прогулочная зона."], "kotor_hotel": ["Palazzo Radomiri Heritage Boutique Hotel", 42.4694, 18.7679, "hotel", "Котор / Доброта · 1 — 3 июня"], "kotor_old": ["Старый город Котора", 42.4247, 18.7712, "sight", "Старый город, стены, собор, крепость."], "njegusi": ["Негуши", 42.4326, 18.826, "sight", "Остановка по пути к Ловчену."], "lovcen": ["Ловчен / мавзолей Негоша", 42.3998, 18.8368, "mountain", "Главная горная точка."], "cetinje": ["Цетине", 42.3908, 18.9215, "sight", "Старая столица."], "lipa_cave": ["Липская пещера", 42.3705, 18.946, "sight", "Пещера около Цетине."], "perast_hotel": ["Heritage Hotel Leon Coronato", 42.4869, 18.6994, "hotel", "Пераст · 3 — 6 июня"], "perast": ["Пераст", 42.4868, 18.6992, "sight", "Набережная, церковь Святого Николая, дворцы."], "our_lady_rocks": ["Остров Богородицы на Рифе", 42.4866, 18.6887, "boat", "Лодка из Пераста."], "risan": ["Рисан", 42.5157, 18.6956, "sight", "Римские мозаики и набережная."], "herceg": ["Херцег-Нови", 42.4522, 18.5379, "sight", "Старый город, крепости, набережная."], "savina": ["Монастырь Савина", 42.4521, 18.5612, "sight", "Остановка рядом с Херцег-Нови."], "kamenari": ["Каменари", 42.4676, 18.6736, "ferry", "Паром."], "lepetane": ["Лепетане", 42.4684, 18.6877, "ferry", "Паром."], "virpazar": ["Вирпазар / Скадарское озеро", 42.2466, 19.0911, "sight", "Причал и прогулка по озеру."], "sveti": ["Свети-Стефан", 42.2559, 18.895, "sight", "Видовая остановка."], "hotel_boka": ["Hotel Boka — Radanovići", 42.378362, 18.751028, "hotel", "Последняя ночь · 6 — 7 июня"]};
+const DAYS = [{"id": "d1", "date": "30 мая", "base": "Тиват", "color": "#2563eb", "title": "Прилет, отель и Porto Montenegro", "route": ["airport", "tivat_hotel", "porto"], "gmaps": ["airport", "tivat_hotel", "porto"], "extra": []}, {"id": "d2", "date": "31 мая", "base": "Тиват", "color": "#16a34a", "title": "Луштица, пляжи и Голубая пещера", "route": ["tivat_hotel", "plavi_parking", "miriste", "lustica_bay", "tivat_hotel"], "extra": [["boat", ["miriste", "blue_cave", "miriste"]]], "gmaps": ["tivat_hotel", "plavi_parking", "miriste", "lustica_bay", "tivat_hotel"]}, {"id": "d3", "date": "1 июня", "base": "Котор / Доброта", "color": "#f97316", "title": "Переезд в Котор и Старый город", "route": ["tivat_hotel", "kotor_hotel", "kotor_old"], "gmaps": ["tivat_hotel", "kotor_hotel", "kotor_old"]}, {"id": "d4", "date": "2 июня", "base": "Котор / Доброта", "color": "#dc2626", "title": "Ловчен, Негуши, Цетине и Липская пещера", "route": ["kotor_hotel", "njegusi", "lovcen", "cetinje", "lipa_cave", "kotor_hotel"], "gmaps": ["kotor_hotel", "njegusi", "lovcen", "cetinje", "lipa_cave", "kotor_hotel"]}, {"id": "d5", "date": "3 июня", "base": "Пераст", "color": "#9333ea", "title": "Переезд в Пераст и остров Богородицы на Рифе", "route": ["kotor_hotel", "perast_hotel"], "extra": [["boat", ["perast_hotel", "our_lady_rocks", "perast_hotel"]]], "gmaps": ["kotor_hotel", "perast_hotel", "perast"]}, {"id": "d6", "date": "4 июня", "base": "Пераст", "color": "#92400e", "title": "Рисан, Херцег-Нови и монастырь Савина", "route": ["perast_hotel", "risan", "herceg", "savina", "perast_hotel"], "extra": [], "gmaps": ["perast_hotel", "risan", "herceg", "savina", "perast_hotel"]}, {"id": "d7", "date": "5 июня", "base": "Пераст", "color": "#db2777", "title": "Спокойный день: Пераст и Рисан", "route": ["perast_hotel", "risan", "perast_hotel"], "gmaps": ["perast_hotel", "risan", "perast_hotel"]}, {"id": "d8", "date": "6 июня", "base": "Hotel Boka", "color": "#0891b2", "title": "Скадарское озеро и Свети-Стефан", "route": ["perast_hotel", "virpazar", "sveti", "hotel_boka"], "gmaps": ["perast_hotel", "virpazar", "sveti", "hotel_boka"]}, {"id": "d9", "date": "7 июня", "base": "Вылет", "color": "#64748b", "title": "Hotel Boka → аэропорт Тиват", "route": ["hotel_boka", "airport"], "gmaps": ["hotel_boka", "airport"]}];
+const GOOGLE_QUERIES = {"airport": "Tivat Airport, Montenegro", "tivat_hotel": "Casa Manor Boutique Hotel, Tivat, Montenegro", "porto": "Porto Montenegro, Tivat, Montenegro", "plavi_parking": "Plavi Horizonti Beach, Montenegro", "miriste": "Mirište Beach, Luštica, Montenegro", "blue_cave": "Blue Cave Montenegro Plava Spilja", "lustica_bay": "Luštica Bay, Montenegro", "kotor_hotel": "Palazzo Radomiri Heritage Boutique Hotel, Dobrota, Kotor, Montenegro", "kotor_old": "Kotor Old Town, Montenegro", "njegusi": "Njeguši, Montenegro", "lovcen": "Mausoleum of Petar II Petrovic Njegos, Lovcen, Montenegro", "cetinje": "Cetinje, Montenegro", "lipa_cave": "Lipa Cave, Cetinje, Montenegro", "perast_hotel": "Heritage Hotel Leon Coronato, Perast, Montenegro", "perast": "Perast, Montenegro", "our_lady_rocks": "Our Lady of the Rocks, Perast, Montenegro", "risan": "Risan, Montenegro", "herceg": "Old Town Herceg Novi, Montenegro", "savina": "Savina Monastery, Herceg Novi, Montenegro", "kamenari": "Kamenari, Montenegro", "lepetane": "Lepetane, Montenegro", "virpazar": "Virpazar, Montenegro", "sveti": "Sveti Stefan, Montenegro", "hotel_boka": "Hotel Boka, Radanovići, Kotor, Montenegro"};
+
+const map = L.map('map', { zoomControl:true, scrollWheelZoom:true }).setView([42.42,18.74],10);
+
+const carto = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  maxZoom:20,
+  attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
+}).addTo(map);
+
+const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom:19,
+  attribution:'&copy; OpenStreetMap contributors'
+});
+
+const esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom:19,
+  attribution:'Tiles &copy; Esri'
+});
+
+const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom:19,
+  attribution:'Tiles &copy; Esri'
+});
+
+const routeLayer = L.layerGroup();
+const overviewLayer = L.layerGroup().addTo(map);
+const selectedLayer = L.layerGroup().addTo(map);
+
+
+
+function ll(k) { return [PLACES[k][1], PLACES[k][2]]; }
+function name(k) { return PLACES[k][0]; }
+function kind(k) { return PLACES[k][3]; }
+function note(k) { return PLACES[k][4] || ''; }
+function popup(k) { return `<div class="popup"><h3>${name(k)}</h3><p>${note(k)}</p></div>`; }
+
+function icon(k) {
+  const c = kind(k);
+  if (c === 'airport') return L.divIcon({className:'', html:'<div class="airport">✈</div>', iconSize:[28,28], iconAnchor:[14,14], popupAnchor:[0,-14]});
+  if (c === 'hotel') {
+    const nums = {tivat_hotel:1,kotor_hotel:2,perast_hotel:3,hotel_boka:4};
+    return L.divIcon({className:'', html:`<div class="hotel"><span>${nums[k] || '•'}</span></div>`, iconSize:[34,34], iconAnchor:[17,34], popupAnchor:[0,-28]});
+  }
+  return L.divIcon({className:'', html:'<div class="marker">•</div>', iconSize:[24,24], iconAnchor:[12,12], popupAnchor:[0,-12]});
+}
+
+function overviewIcon() {
+  return L.divIcon({className:'', html:'<div class="overview"></div>', iconSize:[16,16], iconAnchor:[8,8], popupAnchor:[0,-8]});
+}
+
+function km(m) { return (m/1000).toFixed(1).replace('.', ',') + ' км'; }
+function mins(s) {
+  const m = Math.round(s/60);
+  if (m < 60) return m + ' мин';
+  return Math.floor(m/60) + ' ч ' + (m%60 ? (m%60) + ' мин' : '');
+}
+
+async function fetchRoute(keys) {
+  const coord = keys.map(k => PLACES[k][2] + ',' + PLACES[k][1]).join(';');
+  const url = `https://router.project-osrm.org/route/v1/driving/${coord}?overview=full&geometries=geojson&steps=false`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('route failed');
+  const data = await res.json();
+  if (!data.routes || !data.routes.length) throw new Error('no route');
+  return data.routes[0];
+}
+
+const state = {};
+let selectedDayId = null;
+
+function dayKeys(day) {
+  const keys = new Set(day.route || []);
+  if (day.route2) day.route2.forEach(k => keys.add(k));
+  if (day.extra) day.extra.forEach(e => e[1].forEach(k => keys.add(k)));
+  return Array.from(keys);
+}
+
+function renderDays() {
+  const box = document.getElementById('days');
+  DAYS.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'day';
+    el.id = 'card-' + d.id;
+    el.innerHTML = `
+      <div class="day-head">
+        <div class="date" style="background:${d.color}">${d.date.replace(' ', '<br>')}</div>
+        <div>
+          <p class="day-title">${d.title}</p>
+          <div class="base">База: ${d.base}</div>
+        </div>
+      </div>
+      <span class="chip" id="dist-${d.id}">Маршрут: загрузка…</span>
+    `;
+    el.addEventListener('click', () => showDay(d.id));
+    box.appendChild(el);
+  });
+}
+
+function setActive(id) {
+  document.querySelectorAll('.day').forEach(x => x.classList.remove('active'));
+  const el = document.getElementById('card-' + id);
+  if (el) el.classList.add('active');
+}
+
+function hideRoutes() {
+  selectedDayId = null;
+  if (map.hasLayer(routeLayer)) map.removeLayer(routeLayer);
+  selectedLayer.clearLayers();
+  document.querySelectorAll('.day').forEach(x => x.classList.remove('active'));
+}
+
+function showOverview() {
+  overviewLayer.clearLayers();
+  const keys = ['airport','tivat_hotel','kotor_hotel','perast_hotel','virpazar','sveti','hotel_boka'];
+  keys.forEach(k => overviewLayer.addLayer(L.marker(ll(k), {icon:overviewIcon()}).bindPopup(popup(k))));
+}
+
+function showSelectedMarkers(day) {
+  selectedLayer.clearLayers();
+  dayKeys(day).forEach(k => selectedLayer.addLayer(L.marker(ll(k), {icon:icon(k)}).bindPopup(popup(k))));
+}
+
+function styleDayLines(selectedId=null) {
+  Object.entries(state).forEach(([id, st]) => {
+    st.lines.forEach(line => {
+      if (!selectedId) line.setStyle({opacity:.9, weight:5});
+      else line.setStyle({opacity:id === selectedId ? .98 : 0, weight:id === selectedId ? 7 : 0});
+    });
+  });
+}
+
+function showDay(id) {
+  selectedDayId = id;
+  if (!map.hasLayer(routeLayer)) map.addLayer(routeLayer);
+  const day = DAYS.find(d => d.id === id);
+  setActive(id);
+  showSelectedMarkers(day);
+  styleDayLines(id);
+  const b = state[id]?.bounds;
+  if (b) map.fitBounds(b, {padding:[50,50], maxZoom:13});
+}
+
+async function buildRoutes() {
+  renderDays();
+  const allBounds = [];
+  for (const d of DAYS) {
+    state[d.id] = {lines:[], bounds:null, distance:0};
+    const parts = [d.route];
+    if (d.route2) parts.push(d.route2);
+
+    for (const keys of parts) {
+      try {
+        const r = await fetchRoute(keys);
+        const coords = r.geometry.coordinates.map(c => [c[1], c[0]]);
+        const outline = L.polyline(coords, {color:'#ffffff', weight:9, opacity:.75, lineCap:'round', lineJoin:'round'});
+        const line = L.polyline(coords, {color:d.color, weight:5, opacity:.9, lineCap:'round', lineJoin:'round'});
+        [outline, line].forEach(x => {
+          x.on('click', () => showDay(d.id));
+          routeLayer.addLayer(x);
+          state[d.id].lines.push(x);
+        });
+        state[d.id].distance += r.distance;
+        const lb = line.getBounds();
+        state[d.id].bounds = state[d.id].bounds ? state[d.id].bounds.extend(lb) : lb;
+      } catch(e) {
+        const coords = keys.map(ll);
+        const line = L.polyline(coords, {color:d.color, weight:5, opacity:.9, dashArray:'8 8'});
+        line.on('click', () => showDay(d.id));
+        routeLayer.addLayer(line);
+        state[d.id].lines.push(line);
+        const lb = line.getBounds();
+        state[d.id].bounds = state[d.id].bounds ? state[d.id].bounds.extend(lb) : lb;
+      }
+    }
+    document.getElementById('dist-' + d.id).textContent = state[d.id].distance ? 'Авто: ' + km(state[d.id].distance) : 'Авто: —';
+  }
+
+  Object.values(PLACES).forEach(p => allBounds.push([p[1], p[2]]));
+  showOverview();
+  if (map.hasLayer(routeLayer)) map.removeLayer(routeLayer);
+  map.fitBounds(L.latLngBounds(allBounds), {padding:[35,35]});
+  setTimeout(() => map.invalidateSize(), 300);
+}
+
+document.getElementById('fitAll').addEventListener('click', () => {
+  selectedDayId = null;
+  if (!map.hasLayer(routeLayer)) map.addLayer(routeLayer);
+  styleDayLines(null);
+  selectedLayer.clearLayers();
+  document.querySelectorAll('.day').forEach(x => x.classList.remove('active'));
+  const bounds = [];
+  Object.values(PLACES).forEach(p => bounds.push([p[1], p[2]]));
+  map.fitBounds(L.latLngBounds(bounds), {padding:[35,35]});
+});
+
+document.getElementById('hideAll').addEventListener('click', hideRoutes);
+document.getElementById('focusBay').addEventListener('click', () => map.fitBounds([[42.37,18.48],[42.54,18.88]], {padding:[35,35]}));
+
+
+function googleMapsDirectionsUrlForDay(day) {
+  // For Google Maps we use named attractions/hotels, not raw coordinates.
+  // This makes Google Maps open real places such as "Kotor Old Town" or "Savina Monastery",
+  // instead of anonymous latitude/longitude points.
+  let keys = day.gmaps || day.route || [];
+
+  const clean = [];
+  keys.forEach(k => {
+    if (!clean.length || clean[clean.length - 1] !== k) clean.push(k);
+  });
+
+  if (clean.length < 2) return null;
+
+  const query = (k) => GOOGLE_QUERIES[k] || (PLACES[k] ? `${PLACES[k][0]}, Montenegro` : k);
+  const origin = query(clean[0]);
+  const destination = query(clean[clean.length - 1]);
+  const waypoints = clean.slice(1, -1).map(query).join('|');
+
+  let url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+  if (waypoints) url += `&waypoints=${encodeURIComponent(waypoints)}`;
+  return url;
+}
+
+document.getElementById('openGoogleMaps').addEventListener('click', () => {
+  if (!selectedDayId) {
+    alert('Сначала выберите день маршрута в правой панели.');
+    return;
+  }
+  const day = DAYS.find(d => d.id === selectedDayId);
+  const url = googleMapsDirectionsUrlForDay(day);
+  if (!url) {
+    alert('Для выбранного дня недостаточно автомобильных точек.');
+    return;
+  }
+  window.open(url, '_blank', 'noopener,noreferrer');
+});
+
+window.addEventListener('load', () => setTimeout(() => map.invalidateSize(), 250));
+window.addEventListener('resize', () => setTimeout(() => map.invalidateSize(), 100));
+
+buildRoutes();
+</script>
+</body>
+</html>
