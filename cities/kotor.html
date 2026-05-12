@@ -13,11 +13,14 @@ h1{margin:0 0 8px;color:#0f2e55;font-size:28px;line-height:1.1;letter-spacing:-.
 .subtitle{margin:0 0 14px;color:#64748b;font-size:14px;line-height:1.45}
 .badges{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
 .badge{font-size:12px;padding:5px 8px;border:1px solid #e2e8f0;border-radius:999px;background:#fff;color:#334155;font-weight:800}
+.gmaps-actions{display:grid;gap:9px;margin:12px 0 16px}
+.gmaps-btn{display:block;text-decoration:none;border:1px solid rgba(15,46,85,.14);background:#0f2e55;color:#fff;padding:10px 12px;border-radius:13px;font-weight:900;cursor:pointer;box-shadow:0 3px 12px rgba(15,46,85,.10);text-align:left;font-family:inherit}
+.gmaps-btn:hover{background:#173e70}.gmaps-btn.secondary{background:#fff;color:#0f2e55}
+.gmaps-note{margin:6px 0 0;font-size:12.5px;color:#64748b;line-height:1.35}
 .section-title{margin:18px 0 10px;color:#0f2e55;font-size:13px;text-transform:uppercase;letter-spacing:.07em;font-weight:900}
 ol{margin:8px 0 0 20px;padding:0}li{margin:6px 0;line-height:1.45}
 .stop{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:9px;border-radius:14px;border:1px solid #e2e8f0;background:#fff;margin:8px 0;cursor:pointer}
-.stop:hover{background:#f8fafc}
-.num{width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:13px}
+.stop:hover{background:#f8fafc}.num{width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:13px}
 .stop-name{font-weight:900;color:#0f2e55}.stop-desc{margin-top:2px;font-size:12.5px;color:#64748b;line-height:1.35}
 .back{display:inline-block;margin-bottom:14px;text-decoration:none;color:#0f2e55;font-weight:900;border:1px solid rgba(15,46,85,.14);background:#fff;border-radius:999px;padding:8px 12px}
 .marker-num{width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 8px 18px rgba(15,46,85,.24);font-size:12px}
@@ -32,12 +35,17 @@ ol{margin:8px 0 0 20px;padding:0}li{margin:6px 0;line-height:1.45}
 <h1>Котор</h1>
 <p class="subtitle">Старый город, главные площади, собор и подъем к крепости Святого Иоанна.</p>
 <div class="badges"><span class="badge">⏱ 2,5–4 часа</span><span class="badge">👟 средне / сложно из-за подъема</span></div>
+<div class="gmaps-actions">
+  <a class="gmaps-btn" href="https://www.google.com/maps/dir/?api=1&origin=Kotor%20Old%20Town%20Parking%2C%20Kotor%2C%20Montenegro&destination=San%20Giovanni%20Fortress%2C%20Kotor%2C%20Montenegro&travelmode=walking&waypoints=Sea%20Gate%2C%20Kotor%2C%20Montenegro%7CTrg%20od%20Oru%C5%BEja%2C%20Kotor%2C%20Montenegro%7CSt%20Tryphon%20Cathedral%2C%20Kotor%2C%20Montenegro%7CSt%20Luke%27s%20Church%2C%20Kotor%2C%20Montenegro%7CChurch%20of%20Our%20Lady%20of%20Remedy%2C%20Kotor%2C%20Montenegro" target="_blank" rel="noopener noreferrer">Открыть маршрут в Google Maps</a>
+  
+  <p class="gmaps-note">Откроется пеший маршрут по Старому городу Котора и к крепости.</p>
+</div>
 <div class="section-title">План прогулки</div><ol><li>Войти в Старый город через Морские ворота.</li><li>Пройти Площадь Оружия, собор Святого Трифона и церковь Святого Луки.</li><li>При наличии сил подняться к церкви Богоматери Здравия и крепости Святого Иоанна.</li></ol>
 <div class="section-title">Точки маршрута</div><div id="stops"></div>
 </aside>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const CITY = {"title": "Котор", "subtitle": "Старый город, главные площади, собор и подъем к крепости Святого Иоанна.", "duration": "2,5–4 часа", "difficulty": "средне / сложно из-за подъема", "center": [42.4256, 18.7716], "zoom": 16, "color": "#f97316", "stops": [["Парковка у Старого города", 42.4255, 18.7688, "Начало прогулки."], ["Морские ворота", 42.4248, 18.7696, "Главный вход в Старый город Котора."], ["Площадь Оружия", 42.425, 18.7703, "Главная площадь Старого города."], ["Собор Святого Трифона", 42.4241, 18.7716, "Одна из ключевых достопримечательностей Котора."], ["Церковь Святого Луки", 42.4255, 18.7714, "Историческая церковь в северной части центра."], ["Церковь Богоматери Здравия", 42.4267, 18.7735, "Промежуточная точка подъема к крепости."], ["Крепость Святого Иоанна", 42.4277, 18.7723, "Главная видовая точка над Котором."]], "plan": ["Войти в Старый город через Морские ворота.", "Пройти Площадь Оружия, собор Святого Трифона и церковь Святого Луки.", "При наличии сил подняться к церкви Богоматери Здравия и крепости Святого Иоанна."]};
+const CITY = {"title": "Котор", "subtitle": "Старый город, главные площади, собор и подъем к крепости Святого Иоанна.", "duration": "2,5–4 часа", "difficulty": "средне / сложно из-за подъема", "center": [42.4256, 18.7716], "zoom": 16, "color": "#f97316", "stops": [["Парковка у Старого города", 42.4255, 18.7688, "Начало прогулки."], ["Морские ворота", 42.4248, 18.7696, "Главный вход в Старый город Котора."], ["Площадь Оружия", 42.425, 18.7703, "Главная площадь Старого города."], ["Собор Святого Трифона", 42.4241, 18.7716, "Одна из ключевых достопримечательностей Котора."], ["Церковь Святого Луки", 42.4255, 18.7714, "Историческая церковь в северной части центра."], ["Церковь Богоматери Здравия", 42.4267, 18.7735, "Промежуточная точка подъема к крепости."], ["Крепость Святого Иоанна", 42.4277, 18.7723, "Главная видовая точка над Котором."]], "plan": ["Войти в Старый город через Морские ворота.", "Пройти Площадь Оружия, собор Святого Трифона и церковь Святого Луки.", "При наличии сил подняться к церкви Богоматери Здравия и крепости Святого Иоанна."], "gmaps_url": "https://www.google.com/maps/dir/?api=1&origin=Kotor%20Old%20Town%20Parking%2C%20Kotor%2C%20Montenegro&destination=San%20Giovanni%20Fortress%2C%20Kotor%2C%20Montenegro&travelmode=walking&waypoints=Sea%20Gate%2C%20Kotor%2C%20Montenegro%7CTrg%20od%20Oru%C5%BEja%2C%20Kotor%2C%20Montenegro%7CSt%20Tryphon%20Cathedral%2C%20Kotor%2C%20Montenegro%7CSt%20Luke%27s%20Church%2C%20Kotor%2C%20Montenegro%7CChurch%20of%20Our%20Lady%20of%20Remedy%2C%20Kotor%2C%20Montenegro", "gmaps_note": "Откроется пеший маршрут по Старому городу Котора и к крепости."};
 const map = L.map('map', {zoomControl:true,scrollWheelZoom:true}).setView(CITY.center, CITY.zoom);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {maxZoom:20, attribution:'&copy; OpenStreetMap contributors &copy; CARTO'}).addTo(map);
 const markerLayer = L.layerGroup().addTo(map);

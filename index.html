@@ -287,6 +287,68 @@ button:hover { background:#fff; }
   color:#2563eb;
 }
 
+
+.city-buttons {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin:0 0 18px;
+}
+.city-card {
+  border:1px solid rgba(15,46,85,.14);
+  background:rgba(255,255,255,.95);
+  border-radius:16px;
+  padding:12px;
+  box-shadow:0 3px 12px rgba(15,46,85,.08);
+}
+.city-card-top {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:9px;
+}
+.city-card-name {
+  font-weight:900;
+  color:#0f2e55;
+  line-height:1.25;
+}
+.city-card-meta {
+  color:#64748b;
+  font-size:12.5px;
+  line-height:1.35;
+  margin-top:3px;
+}
+.city-card-actions {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.city-action {
+  display:block;
+  text-decoration:none;
+  border:1px solid rgba(15,46,85,.14);
+  padding:9px 10px;
+  border-radius:12px;
+  font-weight:900;
+  text-align:center;
+  font-size:13px;
+}
+.city-action.map {
+  background:#0f2e55;
+  color:#fff;
+}
+.city-action.google {
+  background:#fff;
+  color:#0f2e55;
+}
+.city-action:hover {
+  transform:translateY(-1px);
+}
+@media (max-width:900px) {
+  .city-card-actions { grid-template-columns:1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -338,12 +400,47 @@ button:hover { background:#fff; }
 
   <div class="section-title">Карты городов</div>
   <div class="city-buttons">
-    <a class="city-link" href="cities/kotor.html" target="_blank" rel="noopener noreferrer">Котор</a>
-    <a class="city-link" href="cities/perast.html" target="_blank" rel="noopener noreferrer">Пераст</a>
-    <a class="city-link" href="cities/tivat.html" target="_blank" rel="noopener noreferrer">Тиват</a>
+    <div class="city-card">
+      <div class="city-card-top">
+        <div>
+          <div class="city-card-name">Котор</div>
+          <div class="city-card-meta">Старый город, собор и крепость</div>
+        </div>
+      </div>
+      <div class="city-card-actions">
+        <a class="city-action map" href="cities/kotor.html" target="_blank" rel="noopener noreferrer">Карта города</a>
+        <a class="city-action google" href="https://www.google.com/maps/dir/?api=1&origin=Kotor%20Old%20Town%20Parking%2C%20Kotor%2C%20Montenegro&destination=San%20Giovanni%20Fortress%2C%20Kotor%2C%20Montenegro&travelmode=walking&waypoints=Sea%20Gate%2C%20Kotor%2C%20Montenegro%7CTrg%20od%20Oru%C5%BEja%2C%20Kotor%2C%20Montenegro%7CSt%20Tryphon%20Cathedral%2C%20Kotor%2C%20Montenegro%7CSt%20Luke%27s%20Church%2C%20Kotor%2C%20Montenegro%7CChurch%20of%20Our%20Lady%20of%20Remedy%2C%20Kotor%2C%20Montenegro" target="_blank" rel="noopener noreferrer">Google Maps</a>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-card-top">
+        <div>
+          <div class="city-card-name">Пераст</div>
+          <div class="city-card-meta">Набережная, музей и церковь Святого Николая</div>
+        </div>
+      </div>
+      <div class="city-card-actions">
+        <a class="city-action map" href="cities/perast.html" target="_blank" rel="noopener noreferrer">Карта города</a>
+        <a class="city-action google" href="https://www.google.com/maps/dir/?api=1&origin=Perast%2C%20Montenegro&destination=Perast%20waterfront%2C%20Montenegro&travelmode=walking&waypoints=Heritage%20Hotel%20Leon%20Coronato%2C%20Perast%2C%20Montenegro%7CSt%20Nicholas%20Church%2C%20Perast%2C%20Montenegro%7CPerast%20Museum%2C%20Perast%2C%20Montenegro" target="_blank" rel="noopener noreferrer">Google Maps</a>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-card-top">
+        <div>
+          <div class="city-card-name">Тиват</div>
+          <div class="city-card-meta">Отель, Porto Montenegro и Pine promenade</div>
+        </div>
+      </div>
+      <div class="city-card-actions">
+        <a class="city-action map" href="cities/tivat.html" target="_blank" rel="noopener noreferrer">Карта города</a>
+        <a class="city-action google" href="https://www.google.com/maps/dir/?api=1&origin=Casa%20Manor%20Boutique%20Hotel%2C%20Tivat%2C%20Montenegro&destination=Pine%20Promenade%2C%20Tivat%2C%20Montenegro&travelmode=walking&waypoints=Porto%20Montenegro%2C%20Tivat%2C%20Montenegro" target="_blank" rel="noopener noreferrer">Google Maps</a>
+      </div>
+    </div>
   </div>
 
-  <div class="controls">
+<div class="controls">
     <button id="fitAll">Показать весь маршрут</button>
     <button id="hideAll">Скрыть линии</button>
     <button id="focusBay">Бока-Которская</button>
