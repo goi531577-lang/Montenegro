@@ -1,14 +1,13 @@
-# Montenegro Route Map
 
-Интерактивный сайт маршрута по Черногории для GitHub Pages.
 
-## Файлы
+## Подтверждения бронирований
 
-- `index.html` — общая карта маршрута.
-- `cities/kotor.html` — отдельная карта прогулки по Котору.
-- `cities/perast.html` — отдельная карта прогулки по Перасту.
-- `cities/tivat.html` — отдельная карта прогулки по Тивату.
+На главной странице добавлены кнопки для открытия PDF-подтверждений отелей.
 
-## Публикация
+Файлы лежат в папке `bookings/`:
+- `casa_manor_tivat.pdf`
+- `palazzo_radomiri_kotor.pdf`
+- `leon_coronato_perast.pdf`
+- `hotel_boka_radanovici.pdf`
 
-Загрузите все файлы и папку `cities` в корень репозитория и включите GitHub Pages: Settings → Pages → Deploy from a branch → main → root.
+При загрузке на GitHub Pages нужно загрузить не только `index.html`, но и папки `cities/` и `bookings/`.
