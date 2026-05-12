@@ -1,25 +1,14 @@
 # Montenegro Route Map
 
-Интерактивная карта маршрута по Черногории для размещения на GitHub Pages.
+Интерактивный сайт маршрута по Черногории для GitHub Pages.
 
-## Как опубликовать на GitHub Pages
+## Файлы
 
-1. Создайте новый репозиторий на GitHub.
-2. Загрузите в корень репозитория файл `index.html`.
-3. В настройках репозитория откройте **Settings → Pages**.
-4. В разделе **Build and deployment** выберите:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/ (root)`
-5. Нажмите **Save**.
-6. Через 1–2 минуты сайт будет доступен по ссылке GitHub Pages.
+- `index.html` — общая карта маршрута.
+- `cities/kotor.html` — отдельная карта прогулки по Котору.
+- `cities/perast.html` — отдельная карта прогулки по Перасту.
+- `cities/tivat.html` — отдельная карта прогулки по Тивату.
 
-## Важно
+## Публикация
 
-Карта использует:
-- Leaflet через CDN;
-- CARTO / OpenStreetMap tiles;
-- OSRM routing service для построения автомобильных маршрутов;
-- Google Maps links для открытия выбранного дня в Google Maps.
-
-Google API key не нужен.
+Загрузите все файлы и папку `cities` в корень репозитория и включите GitHub Pages: Settings → Pages → Deploy from a branch → main → root.

@@ -210,6 +210,28 @@ button:hover { background:#fff; }
     border-top:1px solid rgba(15,46,85,.14);
   }
 }
+
+.city-buttons {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:0 0 18px;
+}
+.city-link {
+  display:block;
+  text-decoration:none;
+  border:1px solid rgba(15,46,85,.14);
+  background:#0f2e55;
+  color:#fff;
+  padding:11px 13px;
+  border-radius:13px;
+  font-weight:900;
+  box-shadow:0 3px 12px rgba(15,46,85,.10);
+  text-align:center;
+}
+.city-link:hover { background:#173e70; }
+@media (max-width:900px) { .city-buttons { grid-template-columns:1fr; } }
+
 </style>
 </head>
 <body>
@@ -218,6 +240,14 @@ button:hover { background:#fff; }
   <h1>Черногория: общая карта маршрута</h1>
   <p class="subtitle">На общей карте оставлены только автомобильные переезды. Линии маршрута скрыты по умолчанию и появляются при выборе дня.</p>
   <p class="note"><strong>Как пользоваться:</strong> нажмите на день — появятся автомобильные линии, точки и стрелки выбранного дня. Кнопка «Показать весь маршрут» включает все автомобильные линии. Кнопка «Открыть достопримечательности в Google Maps» переносит в Google Maps именно именованные места и достопримечательности выбранного дня.</p>
+
+  <div class="section-title">Карты городов</div>
+  <div class="city-buttons">
+    <a class="city-link" href="cities/kotor.html" target="_blank" rel="noopener noreferrer">Котор</a>
+    <a class="city-link" href="cities/perast.html" target="_blank" rel="noopener noreferrer">Пераст</a>
+    <a class="city-link" href="cities/tivat.html" target="_blank" rel="noopener noreferrer">Тиват</a>
+  </div>
+
   <div class="controls">
     <button id="fitAll">Показать весь маршрут</button>
     <button id="hideAll">Скрыть линии</button>
